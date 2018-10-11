@@ -10,6 +10,7 @@ start
 	movlw   0xFF
 	movwf   0x20, ACCESS
 	movwf   0x21, ACCESS
+	movwf   0x22, ACCESS
 	movwf	TRISD, ACCESS
 	movlw 	0x0
 	movwf	TRISC, ACCESS	    ; Port C all outputs
@@ -29,8 +30,13 @@ delay	decfsz 0x20 ; decrement until zero
 	
 delay2	decfsz 0x21 ; decrement until zero	
 	bra delay
+	call delay3
 	return
 		
+delay3	decfsz 0x22 ; decrement until zero	
+	bra delay
+	return
+	
 	goto 	0x0		    ; Re-run program from start
 	
 	end
