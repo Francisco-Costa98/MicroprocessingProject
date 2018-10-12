@@ -9,9 +9,16 @@
 	; ******* Programme FLASH read Setup Code ****  
 setup	bcf	EECON1, CFGS	; point to Flash program memory  
 	bsf	EECON1, EEPGD 	; access Flash program memory
+	movlw	0x00
+	movwf	TRISC, ACCESS
+	movlw	0xFF
+	movwf	0x20, ACCESS
+	movwf	0x21, ACCESS
+	movlw	0xAA
+	movwf	0x22, ACCESS
 	goto	start
 	; ******* My data and where to put it in RAM *
-myTable data	"This is just some data"
+myTable db	$17, $51, $119, $255, $238, $204, $136
 	constant 	myArray=0x400	; Address in RAM for data
 	constant 	counter=0x10	; Address of counter variable
 	; ******* Main programme *********************
@@ -26,9 +33,25 @@ start 	lfsr	FSR0, myArray	; Load FSR0 with address in RAM
 	movwf 	counter		; our counter register
 loop 	tblrd*+			; move one byte from PM to TABLAT, increment TBLPRT
 	movff	TABLAT, POSTINC0	; move read data from TABLAT to (FSR0), increment FSR0	
+	movff	INDF0, PORTC
+	call delay
 	decfsz	counter		; count down to zero
 	bra	loop		; keep going until finished
 	
+delay	decfsz 0x20 ; decrement until zero
+	bra delay
+	call delay1
+	return
+	
+	
+delay1	decfsz 0x21 ; decrement until zero
+	bra delay1
+	call delay2
+	return
+	
+delay2	decfsz 0x22 ; decrement until zero
+	bra delay2
+	return
 	goto	0
 
 	end
