@@ -9,9 +9,10 @@ start	movlw	0x00
 	movwf	TRISC, ACCESS
 	movlw	0x45
 	movwf	PORTC, ACCESS
-	movff	0x06, PORTD
-	incf	0x06, W, ACCESS
-	movwf	0x06, ACCESS
+	movlw	0x00
+	movwf	PORTD, ACCESS
+	movlw	0x01
+	movwf	PORTD, ACCESS
 	
 	goto 0x0
 	end
