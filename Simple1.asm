@@ -17,26 +17,24 @@ setup	movlw	0x00
 	
 start	call write1
 	call read
-	goto 0x0
-	end
+	goto start
 	
 	
-write1	movlw	0x21		; only turns on oe 1 and clock1 for writting, dont care about mem2
+write1	movlw	0x41		; only turns on oe 1 and clock1 for writting, dont care about mem2
 	movwf	PORTD, ACCESS	;moves value for high oe1 to port D
 	movlw	0x45		; chose random number to send to porte
 	movwf	PORTE, ACCESS
-	movlw	0x20		;makes clock tick
+	movlw	0x40		;makes clock tick
 	movwf	PORTD, ACCESS	;makes clock tick
-	movlw	0x21		;makes clock tick
+	movlw	0x41		;makes clock tick
 	movwf	PORTD, ACCESS	;makes clock tick
 	return
 	
 read	movlw	0x01		; only turns on clock1 for writting, dont care about mem2
 	movwf	PORTD, ACCESS	;moves value for low oe1 to port D
-	movlw	0x21		; only turns on oe1 for writting, dont care about mem2
+	movlw	0x41		; only turns on oe1 for writting, dont care about mem2
 	movwf	PORTD, ACCESS	;moves value for high oe1 to port D
 	return
-	
 	
 	goto 0x0
 	end
