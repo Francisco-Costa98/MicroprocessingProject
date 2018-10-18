@@ -10,7 +10,7 @@ setup	movlw   0x04
 	movwf	TRISD, ACCESS	;sets port d to input port
 	movlw	0x00
 	movwf	TRISC, ACCESS	;sets port c to input port
-	movwf	TRISF, ACCESS	;sets port h to input
+	movwf	TRISH, ACCESS	;sets port h to input
 	movlw	0xC3		; turns all control lines to high
 	movwf	PORTD, ACCESS	; moves high values to port D
 	banksel PADCFG1 ; PADCFG1 is not in Access Bank!!
@@ -29,15 +29,18 @@ start	movlw   0x04
 	movff	PORTE, PORTC
 	call write2
 	call read2
-	movff	PORTE, PORTF
+	movff	PORTE, PORTH
 	goto start
 	
 	
 	
 write1	movlw	0x41		; only turns on oe 1 and clock1 for writting
 	movwf	PORTD, ACCESS	;moves value for high oe1 to port D
+	movlw	0x00
+	movwf	PORTE, ACCESS
+	setf	TRISE
 	clrf	TRISE		;sets PORTE to outputs
-	movlw	0x45		; chose random number to send to porte
+	movlw	0x46		; chose random number to send to porte
 	movwf	PORTE, ACCESS
 	movlw	0x40		;makes clock tick
 	movwf	PORTD, ACCESS	;makes clock tick
@@ -47,7 +50,7 @@ write1	movlw	0x41		; only turns on oe 1 and clock1 for writting
 	setf	TRISE		;sets porte top tristate again
 	return
 	
-read	movlw	0x01		; only turns on clock1
+read	movlw	0x81		; only turns on clock1 sets oe2 to high
 	movwf	PORTD, ACCESS	;moves value for low oe1 to port D
 	movlw	0x41		; only turns on oe1 
 	movwf	PORTD, ACCESS	;moves value for high oe1 to port D
@@ -59,8 +62,11 @@ delay	decfsz 0x20 ; decrement until zero
 
 write2	movlw	0x82		; only turns on oe 2 and clock2 for writting
 	movwf	PORTD, ACCESS	;moves value for high oe1 to port D
+	movlw	0x00
+	movwf	PORTE, ACCESS
+	setf	TRISE
 	clrf	TRISE		;sets PORTE to outputs
-	movlw	0x11		; chose random number to send to port e
+	movlw	0xFF		; chose random number to send to port e
 	movwf	PORTE, ACCESS
 	movlw	0x80		;makes clock tick
 	movwf	PORTD, ACCESS	;makes clock tick
@@ -72,7 +78,7 @@ write2	movlw	0x82		; only turns on oe 2 and clock2 for writting
 	setf	TRISE		;sets porte top tristate again
 	return
 	
-read2	movlw	0x02		; only turns on clock2 for writting
+read2	movlw	0x42		; only turns on clock2 for writting sets oe1 to high
 	movwf	PORTD, ACCESS	;moves value for low oe1 to port D
 	movlw	0x82		; only turns on oe2 
 	movwf	PORTD, ACCESS	;moves value for high oe1 to port D
