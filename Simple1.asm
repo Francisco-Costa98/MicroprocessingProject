@@ -56,12 +56,12 @@ delay	decfsz 0x20 ; decrement until zero
 	write2	movlw	0x82		; only turns on oe 2 and clock2 for writting
 	movwf	PORTD, ACCESS	;moves value for high oe1 to port D
 	clrf	TRISE		;sets PORTE to outputs
-	movlw	0x45		; chose random number to send to porte
+	movlw	0x11		; chose random number to send to porte
 	movwf	PORTE, ACCESS
-	movlw	0x40		;makes clock tick
+	movlw	0x80		;makes clock tick
 	movwf	PORTD, ACCESS	;makes clock tick
 	call	delay		;calls 250ns delay
-	movlw	0x41		;makes clock tick
+	movlw	0x82		;makes clock tick
 	movwf	PORTD, ACCESS	;makes clock tick
 	movlw	0x00
 	movwf	PORTE, ACCESS
