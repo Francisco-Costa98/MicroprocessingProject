@@ -10,8 +10,8 @@ SPI_MasterInit ; Set Clock edge to positive
 	movlw (1<<SSPEN)|(1<<CKP)|(0x02)
 	movwf SSP2CON1
 	; SDO2 output; SCK2 output
-	bcf TRISC, SDO2
-	bcf TRISC, SCK2
+	bcf TRISD, SDO2
+	bcf TRISD, SCK2
 	return
 SPI_MasterTransmit ; Start transmission of data (held in W)
 	movwf SSP2BUF
