@@ -5,7 +5,7 @@
 	
 	
 	org 0x100		    ; Main code starts here at address 0x100
-	call SPI_MasterInit
+	call	SPI_MasterInit
 	goto	start
 	
 	
