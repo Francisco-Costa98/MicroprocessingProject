@@ -2,22 +2,19 @@
 	
 	code
 	org 0x0
+	
+	
+	org 0x100		    ; Main code starts here at address 0x100
 	call SPI_MasterInit
 	goto	start
 	
-	org 0x100		    ; Main code starts here at address 0x100
-
+	
 start
 	movlw   0xFF
 	movwf   0x20, ACCESS
 	movwf   0x21, ACCESS
-	movlw 	0x0
-	bra 	test
-loop	movff 	0x06, PORTC
-	incf 	0x06, W, ACCESS
-test	movwf	0x06, ACCESS	    ; Test for end of loop condition
-	cpfsgt 	0x06, ACCESS
-	call	delay
+loop	movlw	0x45
+	call	SPI_MasterTransmit
 	bra 	loop	; Not yet finished goto start of loop again
 	
 delay	decfsz 0x20 ; decrement until zero
@@ -26,10 +23,8 @@ delay	decfsz 0x20 ; decrement until zero
 	return
 	
 delay2	decfsz 0x21 ; decrement until zero	
-	bra delay
-	call delay3
+	bra delay2
 	return
-	goto	setup
 		
 SPI_MasterInit ; Set Clock edge to positive
 	bsf SSP2STAT, CKE
@@ -42,8 +37,13 @@ SPI_MasterInit ; Set Clock edge to positive
 	return
 SPI_MasterTransmit ; Start transmission of data (held in W)
 	movwf SSP2BUF
+	call Wait_Transmit
+	return
 Wait_Transmit ; Wait for transmission to complete
 	btfss PIR2, SSP2IF
 	bra Wait_Transmit
 	bcf PIR2, SSP2IF ; clear interrupt flag
 	return
+
+	goto 0x00
+	end
