@@ -1,6 +1,6 @@
 #include p18f87k22.inc
 
-    global  LCD_Setup, LCD_Write_Message
+    global  LCD_Setup, LCD_Write_Message, LCD_Clear
 
 acs0    udata_acs   ; named variables in access ram
 LCD_cnt_l   res 1   ; reserve 1 byte for variable LCD_cnt_l
@@ -20,7 +20,7 @@ LCD_Setup
 	movwf	TRISB
 	movlw   .40
 	call	LCD_delay_ms	; wait 40ms for LCD to start up properly
-	movlw	b'00110000'	; Function set 4-bit
+	movlw	b'00000011'	; Function set 4-bit
 	call	LCD_Send_Nib
 	movlw	.10		; wait 40us
 	call	LCD_delay_x4us
@@ -62,8 +62,8 @@ LCD_Send_Byte_I		    ; Transmits byte stored in W to instruction reg
 	movwf   LATB	    ; output data bits to LCD
 	bcf	LATB, LCD_RS	; Instruction write clear RS bit
 	call    LCD_Enable  ; Pulse enable Bit 
-LCD_Send_Nib
 	movf	LCD_tmp,W   ; swap nibbles, now do low nibble
+LCD_Send_Nib
 	andlw   0x0f	    ; select just low nibble
 	movwf   LATB	    ; output data bits to LCD
 	bcf	LATB, LCD_RS    ; Instruction write clear RS bit
@@ -133,7 +133,13 @@ lcdlp1	decf 	LCD_cnt_l,F	; no carry when 0x00 -> 0xff
 	bc 	lcdlp1		; carry, then loop again
 	return			; carry reset so return
 
-
+	
+LCD_Clear
+	movlw	b'00000001'
+	call	LCD_delay_ms
+	call	LCD_delay_ms
+	return
+	
     end
 
 
