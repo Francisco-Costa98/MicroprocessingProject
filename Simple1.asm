@@ -49,12 +49,17 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	movlw	myTable_l-1	; output message to LCD (leave out "\n")
 	lfsr	FSR2, myArray
 	call	LCD_Write_Message
+	
+	
 	movlw	myTable_l	; output message to UART
 	lfsr	FSR2, myArray
 	call	UART_Transmit_Message
 	
 	;call	clr_loop
-
+	call Bttn_press 
+	movlw	myTable_l-1	; output message to LCD (leave out "\n")
+	lfsr	FSR2, myArray
+	call	LCD_Write_Message
 	
 	goto	$		; goto current line in code
 	
@@ -74,4 +79,35 @@ delay	decfsz	delay_count	; decrement until zero
 	bra delay
 	return
 
+
+button_press_message 	
+	call	LCD_Clear
+myTable2 data	"send nudes  \n"
+	lfsr	FSR0, myArray	; Load FSR0 with address in RAM	
+	movlw	upper(myTable2)	; address of data in PM
+	movwf	TBLPTRU		; load upper bits to TBLPTRU
+	movlw	high(myTable2)	; address of data in PM
+	movwf	TBLPTRH		; load high byte to TBLPTRH
+	movlw	low(myTable2)	; address of data in PM
+	movwf	TBLPTRL		; load low byte to TBLPTRL
+	movlw	myTable_l	; bytes to read
+	movwf 	counter		; our counter register
+loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
+	movff	TABLAT, POSTINC0; move data from TABLAT to (FSR0), inc FSR0	
+	decfsz	counter		; count down to zero
+	bra	loop		; keep going until finished
+	return
+		
+	
+	
+Bttn_press 
+	movlw	0x01
+	movwf	0x01, ACCESS
+	movf	PORTD, W, ACCESS
+	btfsc 	0x01, ACCESS
+	call button_press_message
+	bra	Bttn_press
+	return
 	end
+
+	
