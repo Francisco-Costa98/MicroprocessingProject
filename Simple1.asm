@@ -19,25 +19,36 @@ setup
 	bsf	PADCFG1, REPU, BANKED ; PortE pull-ups on
 	movlb	0x00 ; set BSR back to Bank 0
 	setf	TRISE, ACCESS ; Tri-state PortE	
-	movlw	0X00
+	clrf	LATE
+	movlw	0x00
 	movwf	PORTF, ACCESS
+	movlw	0x0A
+	movwf	0x20, ACCESS
 	goto	start
 	
-start	clrf	LATE
+start	
 	movlw	0x0F
 	movwf	TRISE, ACCESS
-	movff	PORTE, 0x01, ACCESS
-	movlw	0x0F
-	subwf	0x01, 1, 0
-	clrf	LATE
+	movff	PORTE, 0x01
+	movlw	0x00
+	addwf	0x01, 0, 0
+	sublw	0x0F
+	movwf	0x01
+	
 	movlw	0xF0
 	movwf	TRISE, ACCESS
 	call	delay
-	movff	PORTE, 0x02, ACCESS
-	movlw	0xF0
-	subwf	0x02, 1, 0
-	movfw	0x01
+	movff	PORTE, 0x02
+	movlw	0x00
+	addwf	0x02, 0, 0
+	sublw	0xF0
+	movwf	0x02
+	movlw	0x00
+	addwf	0x01, 0, 0
 	addwf	0x02, 1, 0
+	call	delay
+	
+	
 test0	movlw	.130
 	cpfseq	0x02
 	bra	test1
@@ -130,24 +141,19 @@ testE	movlw	.40
 	goto	finish
 testF	movlw	.24
 	cpfseq	0x02
-	movlw	0x00
 	movlw	0x0F
 	movwf	0x03, ACCESS
 	goto	finish
-finish	nop
-	nop
-	nop
 
-	movff 0x03, PORTF, ACCESS
-	
-	
+finish	
+	movff	0x03, PORTF
 	goto	start		; goto current line in code
 	
 	
 	
 
 	; a delay subroutine if you need one, times around loop in delay_count
-delay	decfsz	delay_count	; decrement until zero
+delay	decfsz	0x20	; decrement until zero
 	bra delay
 	return
 
