@@ -24,6 +24,7 @@ setup	bcf	EECON1, CFGS	; point to Flash program memory
 	bsf	EECON1, EEPGD 	; access Flash program memory
 	call	UART_Setup	; setup UART
 	call	LCD_Setup	; setup LCD
+	call	ADC_Setup	; setup ADC
 	movlw	0xFF
 	movwf	TRISD, ACCESS	;set up portd as input
 	goto	start
@@ -55,24 +56,13 @@ loop 	tblrd*+			; one byte from PM to TABLAT, increment TBLPRT
 	lfsr	FSR2, myArray
 	call	UART_Transmit_Message
 	
-	;call	clr_loop
-	call Bttn_press 
-	movlw	myTable_l-1	; output message to LCD (leave out "\n")
-	lfsr	FSR2, myArray
-	call	LCD_Write_Message
-	
-	goto	$		; goto current line in code
-	
-	
-	
-clr_loop 
-	movlw	0x00
-	movwf	0x01, ACCESS
-	movf	PORTD, W, ACCESS
-	cpfseq 	0x01, ACCESS
-	call	LCD_Clear
-	bra	clr_loop
-	return
+measure_loop
+	call	ADC_Read
+	movf	ADRESH,W
+	call	LCD_Write_Hex
+	movf	ADRESL,W
+	call	LCD_Write_Hex
+	goto	measure_loop		; goto current line in code
 
 	; a delay subroutine if you need one, times around loop in delay_count
 delay	decfsz	delay_count	; decrement until zero
