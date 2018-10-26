@@ -227,7 +227,7 @@ Write	movlw	0x0A
 	movlw	0x0A
 	movwf	0x20, ACCESS
 	call	delay
-	call	LCD_Cursor_R
+	;call	LCD_Cursor_R
 	movlw	0xFF
 	movwf	0x20, ACCESS
 	movlw	0x10
