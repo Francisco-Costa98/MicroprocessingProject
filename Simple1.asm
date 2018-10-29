@@ -128,13 +128,13 @@ eightbytwentyfour
 	movf	result2, W
 	mullw	0x0A
 	movf	PRODL, W
-	addwf	temp2, 1	    ;assumed no carry bit, if carry bit use addwfc
+	addwf	temp2, 1	   
 	movf	PRODH, W
 	addwfc	temp3, 1
 	movf	result3, W
 	mullw	0x0A
 	movf	PRODL, W
-	addwf	temp3, 1	    ;assumed no carry bit, if carry bit use addwfc
+	addwf	temp3, 1	    
 	movf	PRODH, W
 	addwfc	temp4, 1
 	movff	temp1, result1
