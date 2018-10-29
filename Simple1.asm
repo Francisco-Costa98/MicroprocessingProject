@@ -16,7 +16,15 @@ result1	    res 1   ; reserves 1 byte for result
 result2	    res 1   ; reserves 1 byte for result
 result3	    res 1   ; reserves 1 byte for result
 result4	    res 1   ; reserves 1 byte for result
-
+voltage1    res 1   ; reserves 1 byte for result
+voltage2    res 1   ; reserves 1 byte for result
+voltage3    res 1   ; reserves 1 byte for result
+voltage4    res 1   ; reserves 1 byte for result
+temp1    res 1   ; reserves 1 byte for result
+temp2    res 1   ; reserves 1 byte for result
+temp3    res 1   ; reserves 1 byte for result
+temp4    res 1   ; reserves 1 byte for result
+	    
 tables	udata	0x400    ; reserve data anywhere in RAM (here at 0x400)
 myArray res 0x80    ; reserve 128 bytes for message data
 
@@ -102,9 +110,38 @@ sixteenbysixteen
 	addwfc	result3, 1	
 	movf	PRODH, W
 	addwfc	result4, 1
+	movff	result4, voltage4
 	
 	return
 	
+eightbytwentyfour
+	
+	movff	result4, temp4
+	movff	result3, temp3
+	movff	result2, temp2
+	movff	result1, temp1
+	movlw	0x00
+	movwf	temp3
+	movf	result1, W
+	mullw	0x0A
+	movff	PRODL, temp1
+	movff	PRODH, temp2
+	movf	result2, W
+	mullw	0x0A
+	movf	PRODL, W
+	addwf	temp2, 1	    ;assumed no carry bit, if carry bit use addwfc
+	movf	PRODH, W
+	addwfc	temp3, 1
+	movf	result3, W
+	mullw	0x0A
+	movf	PRODL, W
+	addwf	temp3, 1	    ;assumed no carry bit, if carry bit use addwfc
+	movf	PRODH, W
+	addwfc	temp4, 1
+	
+	return
+	
+
 print_hex	
 	movf	result4, W
 	call	LCD_Write_Hex
