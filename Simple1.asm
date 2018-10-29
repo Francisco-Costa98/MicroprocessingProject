@@ -110,7 +110,6 @@ sixteenbysixteen
 	addwfc	result3, 1	
 	movf	PRODH, W
 	addwfc	result4, 1
-	movff	result4, voltage4
 	
 	return
 	
@@ -138,6 +137,10 @@ eightbytwentyfour
 	addwf	temp3, 1	    ;assumed no carry bit, if carry bit use addwfc
 	movf	PRODH, W
 	addwfc	temp4, 1
+	movff	temp1, result1
+	movff	temp2, result2
+	movff	temp3, result3
+	movff	temp4, result4
 	
 	return
 	
