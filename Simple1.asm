@@ -162,6 +162,8 @@ print_hex
 	movf	voltage4, W
 	addlw	0x30
 	call	LCD_Send_Byte_D
+	movlw	0x2E
+	call	LCD_Send_Byte_D
 	movf	voltage3, W
 	addlw	0x30
 	call	LCD_Send_Byte_D
