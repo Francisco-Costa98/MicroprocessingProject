@@ -1,17 +1,21 @@
 	#include p18f87k22.inc
 
 	extern	UART_Setup, UART_Transmit_Message  ; external UART subroutines
-	extern  LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Clear, LCD_Cursor_Go_Home  ; external LCD subroutines
+	extern  LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Clear, LCD_Cursor_Go_Home,LCD_Cursor_D,LCD_Cursor_R  ; external LCD subroutines
 	extern	ADC_Setup, ADC_Read ; external ADC sub routines
     
 	
 acs0	udata_acs   ; reserve data space in access ram
 counter	    res 1   ; reserve one byte for a counter variable
 delay_count res 1   ; reserve one byte for counter in the delay routine
-hex1H	    res	1   ; reserve 1 byte for hex values
-hex1L	    res	1   ; reserve 1 byte for hex values
+hexH	    res	1   ; reserve 1 byte for hex values
+hexL	    res	1   ; reserve 1 byte for hex values
 kH	    res 1   ; reserve 1 byte for k 
 kL	    res 1   ; reserve 1 byte for k 
+result1	    res 1   ; reserves 1 byte for result
+result2	    res 1   ; reserves 1 byte for result
+result3	    res 1   ; reserves 1 byte for result
+result4	    res 1   ; reserves 1 byte for result
 
 tables	udata	0x400    ; reserve data anywhere in RAM (here at 0x400)
 myArray res 0x80    ; reserve 128 bytes for message data
@@ -38,10 +42,10 @@ start
 measure_loop
 	call	ADC_Read
 	movf	ADRESH,W
-	movwf	hex1H
+	movwf	hexH
 	call	LCD_Write_Hex
 	movf	ADRESL,W
-	movwf	hex1L
+	movwf	hexL
 	call	LCD_Write_Hex
 	call	eightbysixteen
 	call	LCD_Cursor_Go_Home
@@ -53,6 +57,16 @@ delay	decfsz	delay_count	; decrement until zero
 	return
 
 eightbysixteen 
+	movf	kL, W
+	mulwf	hexL
+	movff	PRODL, result1
+	movff	PRODH, result2
+	mulwf	hexH
+	movf	PRODL, W
+	addwf	result2, 1	    ;assumed no carry bit, if carry bit use addwfc
+	movff	PRODH, result3
+	
+	
 	
 	end
 
