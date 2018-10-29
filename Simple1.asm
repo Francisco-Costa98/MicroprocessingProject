@@ -1,7 +1,7 @@
 	#include p18f87k22.inc
 
 	extern	UART_Setup, UART_Transmit_Message  ; external UART subroutines
-	extern  LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Clear, LCD_Cursor_Go_Home,LCD_Cursor_D,LCD_Cursor_R  ; external LCD subroutines
+	extern  LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Clear, LCD_Cursor_Go_Home,LCD_Cursor_D,LCD_Cursor_R,LCD_Send_Byte_D  ; external LCD subroutines
 	extern	ADC_Setup, ADC_Read ; external ADC sub routines
     
 	
@@ -48,7 +48,11 @@ measure_loop
 	movwf	hexL
 	call	LCD_Write_Hex
 	call	eightbysixteen
+	call	LCD_Cursor_D
+	movf	result2, W
+	call	LCD_Write_Hex
 	call	LCD_Cursor_Go_Home
+	
 	goto	measure_loop		; goto current line in code
 
 	; a delay subroutine if you need one, times around loop in delay_count
@@ -65,6 +69,7 @@ eightbysixteen
 	movf	PRODL, W
 	addwf	result2, 1	    ;assumed no carry bit, if carry bit use addwfc
 	movff	PRODH, result3
+	return
 	
 	
 	
