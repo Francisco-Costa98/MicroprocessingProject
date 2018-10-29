@@ -160,13 +160,17 @@ convert
 	
 print_hex
 	movf	voltage4, W
-	call	LCD_Write_Hex
+	addlw	0x30
+	call	LCD_Send_Byte_D
 	movf	voltage3, W
-	call	LCD_Write_Hex
+	addlw	0x30
+	call	LCD_Send_Byte_D
 	movf	voltage2, W
-	call	LCD_Write_Hex
+	addlw	0x30
+	call	LCD_Send_Byte_D
 	movf	voltage1, W
-	call	LCD_Write_Hex
+	addlw	0x30
+	call	LCD_Send_Byte_D
 	return
 	
 	
