@@ -47,7 +47,7 @@ measure_loop
 	movf	ADRESL,W
 	movwf	hexL
 	call	LCD_Write_Hex
-	call	eightbysixteen
+	call	sixteenbysixteen
 	call	LCD_Cursor_D
 	call	print_hex
 	call	LCD_Cursor_Go_Home
@@ -71,6 +71,38 @@ eightbysixteen
 	addwf	result2, 1	    ;assumed no carry bit, if carry bit use addwfc
 	movf	PRODH, W
 	addwfc	result3, 1
+	return
+	
+sixteenbysixteen
+	movlw	0x00
+	movwf	result3
+	movwf	result4
+	movf	kL, W
+	mulwf	hexL
+	movff	PRODL, result1
+	movff	PRODH, result2
+	
+	mulwf	hexH
+	movf	PRODL, W
+	addwf	result2, 1	    ;assumed no carry bit, if carry bit use addwfc
+	movf	PRODH, W
+	addwfc	result3, 1
+	
+	movf	kH, W
+	mulwf	hexL
+	movf	PRODL, W
+	addwf	result2, 1
+	movf	PRODH, W
+	addwfc	result3, 1
+	
+	
+	movf	kH, W
+	mulwf	hexH
+	movf	PRODL, W
+	addwfc	result3, 1	
+	movf	PRODH, W
+	addwfc	result4, 1
+	
 	return
 	
 print_hex	
