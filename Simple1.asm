@@ -162,7 +162,7 @@ print_hex
 	movf	voltage4, W
 	addlw	0x30
 	call	LCD_Send_Byte_D
-	movlw	0x2E
+	movlw	0x2E		    ;decimal point
 	call	LCD_Send_Byte_D
 	movf	voltage3, W
 	addlw	0x30
@@ -172,6 +172,8 @@ print_hex
 	call	LCD_Send_Byte_D
 	movf	voltage1, W
 	addlw	0x30
+	call	LCD_Send_Byte_D
+	movlw	0x56
 	call	LCD_Send_Byte_D
 	return
 	
