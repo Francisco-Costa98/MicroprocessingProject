@@ -1,7 +1,8 @@
 	#include p18f87k22.inc
 
 	extern	UART_Setup, UART_Transmit_Message  ; external UART subroutines
-	extern  LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Clear, LCD_Cursor_Go_Home,LCD_Cursor_D,LCD_Cursor_R,LCD_Send_Byte_D , LCD_Cursor_L ; external LCD subroutines
+	extern  LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Clear	; external LCD subroutines
+	extern	LCD_Cursor_Go_Home,LCD_Cursor_D,LCD_Cursor_R,LCD_Send_Byte_D , LCD_Cursor_L ; external LCD subroutines
 	extern	ADC_Setup, ADC_Read ; external ADC sub routines
     
 	
@@ -157,7 +158,7 @@ convert
 	movff	result4, voltage1
 	return
 	
-print_hex	
+print_hex
 	movf	voltage4, W
 	call	LCD_Write_Hex
 	movf	voltage3, W
