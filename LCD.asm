@@ -1,7 +1,6 @@
 #include p18f87k22.inc
 
-    global  LCD_Setup, LCD_Write_Message, LCD_Write_Hex
-    global  LCD_Setup, LCD_Write_Message, LCD_Clear
+    global  LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Clear, LCD_Cursor_Go_Home;, LCD_Cursor_R, LCD_Cursor_D
 
 acs0    udata_acs   ; named variables in access ram
 LCD_cnt_l   res 1   ; reserve 1 byte for variable LCD_cnt_l
@@ -156,6 +155,13 @@ lcdlp1	decf 	LCD_cnt_l,F	; no carry when 0x00 -> 0xff
 	
 LCD_Clear
 	movlw	b'00000001'
+	call	LCD_Send_Byte_I	
+	call	LCD_delay_ms
+	call	LCD_delay_ms
+	return
+	
+LCD_Cursor_Go_Home
+	movlw	b'00000010'
 	call	LCD_Send_Byte_I	
 	call	LCD_delay_ms
 	call	LCD_delay_ms
