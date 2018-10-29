@@ -49,8 +49,7 @@ measure_loop
 	call	LCD_Write_Hex
 	call	eightbysixteen
 	call	LCD_Cursor_D
-	movf	result2, W
-	call	LCD_Write_Hex
+	call	print_hex
 	call	LCD_Cursor_Go_Home
 	
 	goto	measure_loop		; goto current line in code
@@ -61,6 +60,8 @@ delay	decfsz	delay_count	; decrement until zero
 	return
 
 eightbysixteen 
+	movlw	0x00
+	movwf	result3
 	movf	kL, W
 	mulwf	hexL
 	movff	PRODL, result1
@@ -68,9 +69,20 @@ eightbysixteen
 	mulwf	hexH
 	movf	PRODL, W
 	addwf	result2, 1	    ;assumed no carry bit, if carry bit use addwfc
-	movff	PRODH, result3
+	movf	PRODH, W
+	addwfc	result3, 1
 	return
 	
+print_hex	
+	movf	result4, W
+	call	LCD_Write_Hex
+	movf	result3, W
+	call	LCD_Write_Hex
+	movf	result2, W
+	call	LCD_Write_Hex
+	movf	result1, W
+	call	LCD_Write_Hex
+	return
 	
 	
 	end
