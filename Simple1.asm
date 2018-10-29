@@ -56,6 +56,13 @@ measure_loop
 	movwf	hexL
 	call	LCD_Write_Hex
 	call	sixteenbysixteen
+	movff	result4, voltage4
+	call	eightbytwentyfour
+	movff	result4, voltage3
+	call	eightbytwentyfour
+	movff	result4, voltage2
+	call	eightbytwentyfour
+	movff	result4, voltage1
 	call	LCD_Cursor_D
 	call	print_hex
 	call	LCD_Cursor_Go_Home
@@ -115,12 +122,14 @@ sixteenbysixteen
 	
 eightbytwentyfour
 	
-	movff	result4, temp4
 	movff	result3, temp3
 	movff	result2, temp2
 	movff	result1, temp1
 	movlw	0x00
+	movwf	temp4
 	movwf	temp3
+	movwf	temp2
+	movwf	temp1
 	movf	result1, W
 	mullw	0x0A
 	movff	PRODL, temp1
@@ -146,13 +155,13 @@ eightbytwentyfour
 	
 
 print_hex	
-	movf	result4, W
+	movf	voltage4, W
 	call	LCD_Write_Hex
-	movf	result3, W
+	movf	voltage3, W
 	call	LCD_Write_Hex
-	movf	result2, W
+	movf	voltage2, W
 	call	LCD_Write_Hex
-	movf	result1, W
+	movf	voltage1, W
 	call	LCD_Write_Hex
 	return
 	
