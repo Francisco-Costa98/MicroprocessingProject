@@ -1,6 +1,6 @@
 #include p18f87k22.inc
 	
-	global setup_keypad, keypad_start, khigh, klow, test
+	global setup_keypad, keypad_start, khigh, klow, test, c_test
 	
 acs0    udata_acs	    ;reserves space for variables used
 test	res 1
@@ -9,7 +9,7 @@ klow	res 1
 testreg1 res 1
 testreg	res 1
 keypad_delay	res 1
-
+c_test	res 1
 keypad    code		    ;main code
 
 
@@ -34,6 +34,7 @@ setup_keypad				; routine to set up keypad
 	
 keypad_start			;routine to read keypad
 	movlw	0x01		; initiliases test value to se if keypad is pressed
+	movwf	c_test		; tests if c is pressed
 	movwf	test		;moves into the test register
 	movlw	0x0F		; lights up one side of portJ (keypad port) for logic operations
 	movwf	TRISJ, ACCESS	; moves value to port j
@@ -185,6 +186,8 @@ testC	movlw	.136
 	movwf	khigh
 	movlw	0x21
 	movwf	klow
+	movlw	0x00
+	movwf	c_test
 	call	Write
 	goto	finish
 testD	movlw	.72
